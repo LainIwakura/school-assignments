@@ -1,0 +1,1 @@
+/usr/local/bin/c++   -g -Wall   CMakeFiles/bi_heap.dir/bi_heap.cxx.o  -o bi_heap -rdynamic 

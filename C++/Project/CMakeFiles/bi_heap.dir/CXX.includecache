@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yuki/University/Computer Science/C++/Project/BinomialHeap.hxx
+vector
+-
+cmath
+-
+stdexcept
+-
+boost/foreach.hpp
+-
+
+/home/yuki/University/Computer Science/C++/Project/bi_heap.cxx
+iostream
+-
+BinomialHeap.hxx
+/home/yuki/University/Computer Science/C++/Project/BinomialHeap.hxx
+

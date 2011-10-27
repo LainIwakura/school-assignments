@@ -1,0 +1,4 @@
+currentBest = list[0]
+for i : list
+   if list[i] is better than currentBest
+       currentBest = list[i]

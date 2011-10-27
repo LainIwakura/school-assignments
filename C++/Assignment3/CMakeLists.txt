@@ -1,0 +1,11 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+PROJECT(DayOfWeek)
+
+ADD_EXECUTABLE(dow dow-test.cxx dow.cxx)
+ADD_EXECUTABLE(jd jd-test.cxx jd.cxx dow.cxx)
+
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  ADD_DEFINITIONS("-Wall")
+ENDIF()
+

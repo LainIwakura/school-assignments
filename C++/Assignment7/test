@@ -1,0 +1,18 @@
+one two three four five two three four five three four five four five five
+
+this is an example sentence which will be frequency counted
+
+of course the actual number of words depends on the content of the message
+
+a map is a container that stores pairs of keys and values
+
+looking up keys inserting keys and deleting keys are performed in 
+logarithmic or better time
+
+maps support bidirectional iterators not random access iterators
+
+maps are also known as dictionaries or associative arrays
+
+the purpose of this assignment is to determine the relative frequencies of words
+
+once such is done then the words can be output from highest to lower frequency

@@ -1,0 +1,121 @@
+Script started on Sun Mar 06 22:32:03 2011
+charlie:~/C/60-141/Assignment2>cat assign2.c
+
+/* Written by: Zachary Easterbrook
+ * Student ID: 103163420
+ * Section 01
+ * Assignment #2
+ * Data: Feb. 16th 2011
+ * Purpose: To uncompress a text file in a certain format
+ */
+
+// Include files
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+// the one function we'll need.
+void ridWord(char [100][51], int, int);
+
+int main()
+{
+    char Words[100][51];    // Hold our words. Maximum 100 words, 51 chars per word.
+    char line_buffer[BUFSIZ];   // a line buffer
+    int word = 0, character = 0;    // counters
+    int buildingWord = 0;   // flag for building a word
+
+    fgets(line_buffer, BUFSIZ, stdin); // read the line
+    while(1)    // while true
+    {
+        // if the line length is greater than 0 and the first element is 0,
+        // we're done.
+        if(strlen(line_buffer) > 0 && line_buffer[0] == '0') 
+            break;
+        // pointer to the first character
+        char *letter = line_buffer;
+        while(*letter != '\0')  // while it's not a null terminator
+        {
+            if(isalnum(*letter))    // if it's an alphanumeric character, we start building a word.
+            {
+                buildingWord = 1;
+                Words[word][character] = *letter;
+                if(isalpha(*letter))
+                    printf("%c", Words[word][character]);   // print alphabetic characters
+                ++character;
+            }
+            else    // this catches spaces and punctuation
+            {
+                int temp;
+                Words[word][character + 1] = '\0';  // append a terminator character to indicate the end of a word.
+                if(buildingWord == 1)
+                {
+                    if(sscanf(Words[word], "%d", &temp) == 1)   // scan for an integer, if we find one...
+                    {
+                        printf("%s",Words[word - temp]);    // print the word at the proper index
+                        ridWord(Words, temp, word); // remove it from our stack.
+                    }
+                    else    // we didn't find an int, so we must just have a new word... ++ that index.
+                        ++word;
+                    buildingWord = 0;
+                    character = 0;
+                }
+                printf("%c", *letter);  // prints spaces / punctuation
+            }
+            ++letter; // move our pointer
+        }
+        fgets(line_buffer, BUFSIZ, stdin); // read the next line
+    }
+
+    return 0;
+}
+
+// This function handles our stack of words, it takes the stack, position we
+// want, and length of the word.
+void ridWord(char Words[100][51], int position, int length)
+{
+    char temp[51];
+    int i;
+    // copy the word at the correct index into a temp variable
+    strcpy(temp,Words[length - position]);
+    // move ever item down one
+    for(i = length - position; i < length; ++i)
+        strcpy(Words[i],Words[i+1]);
+    // copy the temp word back to the front of the stack.
+    strcpy(Words[length - 1],temp);
+}
+charlie:~/C/60-141/Assignment2>cat input.txt 
+
+Dear Sally,
+
+   Please, please do it--1 would 4
+Mary very, 1 much.  And 4 6
+8 everything in 5's power to make
+14 pay off for you.
+
+   -- Thank 2 18 18--
+0
+charlie:~/C/60-141/Assignment2>cc assign2.c
+
+charlie:~/C/60-141/Assignment2>./a.out < input.txt 
+
+Dear Sally,
+
+   Please, please do it--it would please
+Mary very, very much.  And Mary would
+do everything in Mary's power to make
+it pay off for you.
+
+   -- Thank you very much--
+charlie:~/C/60-141/Assignment2>ls -l
+
+total 27
+-rwxr-xr-x+  1 easterbz temp        7744 Mar  6 22:33 a.out
+-rw-r--r--+  1 easterbz temp        2969 Mar  6 22:31 assign2.c
+-rw-r--r--+  1 easterbz temp           0 Mar  6 22:32 assign2.txt
+-rw-r--r--+  1 easterbz temp         155 Feb 18 23:44 input.txt
+charlie:~/C/60-141/Assignment2>exit
+
+exit
+
+script done on Sun Mar 06 22:33:17 2011
