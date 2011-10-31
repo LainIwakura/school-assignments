@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   switch (argc)
   {
     case 1:
-      cat_std();
+      cat_std(0, 0);
       break;
     case 2:
       if (opt != 'n')
@@ -40,17 +40,23 @@ int main(int argc, char *argv[])
   return EXIT_SUCCESS;
 }
 
-void cat_std()
+void cat_std(int linesOn, int *curLine)
 {
   char line[BUFSIZ];
   while (fgets(line, BUFSIZ, stdin) != NULL)
-    printf("%s", line);
+  {
+    if (linesOn == 1)
+      printf("     %d  %s", (*curLine)++, line);
+    else
+      printf("%s", line);
+  }
 }
 
 void cat_file(int numFiles, char *files[], int linesOn)
 {
   int i = 0;
   int j = 1;
+  int *jPtr = &j;
   FILE *fp;
   char line[BUFSIZ];
 
@@ -59,18 +65,24 @@ void cat_file(int numFiles, char *files[], int linesOn)
 
   for (i += 1; i < numFiles; i++)
   {
-    if ((fp = fopen(files[i], "r")) != NULL)
+    if (*(files[i]) == '-')
+    {
+      cat_std(1, jPtr);
+    }
+    else if ((fp = fopen(files[i], "r")) != NULL)
     {
       while (fgets(line, BUFSIZ, fp))
       {
         if (linesOn == 1)
-          printf("     %d  %s", j++, line);
+          printf("     %d  %s", (*jPtr)++, line);
         else
           printf("%s", line);
       }
       fclose(fp);
     }
     else
+    {
       fprintf(stderr, "%s: %s: No such file or directory\n", files[0], files[i]);
+    }
   }
 }
