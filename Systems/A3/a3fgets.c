@@ -6,15 +6,12 @@
 
 // For system calls...
 #include <unistd.h>
-#include <stdio.h>
+#include <fcntl.h>
+//#include <stdio.h>
 
-char * a3_fgets(char *str, int num, int stream)
+char * a3_fgets(char * str, int num, int stream)
 {
-  int fd = open(stream);
-
-  if (read(stream, str, num) == -1)
-    return 0;
-
+  read(stream, str, num);
   str[num] = '\0';
 
   return str;
@@ -24,6 +21,6 @@ int main()
 {
   char line[1024];
   a3_fgets(line, 1024, STDIN_FILENO);
-  printf("%s\n", line);
+  //printf("%s", line);
   return 0;
 }

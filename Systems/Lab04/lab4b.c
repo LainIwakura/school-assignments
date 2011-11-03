@@ -21,7 +21,10 @@ void build_token_arr(char *t[], char *s)
 int main(int argv, char *argc[])
 {
   if (argv != 3)
+  {
     fprintf(stderr, "Error: The program needs exactly 2 arguments.\n");
+    exit(1);
+  }
 
   FILE *file1;                  // Old file we read from
   FILE *file2;                  // New file we write to
@@ -29,14 +32,16 @@ int main(int argv, char *argc[])
   char *new_filename = argc[2]; // New filename
   char *tok_arr[4];             // A 2D array for our tokens
   char line[BUFSIZ];            // To go through the file line by line 
-  int i;                        // Just a variable for counting
   float new_num;                // Need this to store a float value from the string..thing..yeah...
 
   // We just get file 2 prepared here so it's not buried far in the other
   // if / while / switch statements...
   file2 = fopen(new_filename, "w");
   if (file2 == NULL)
+  {
     perror("Error");
+    exit(1);
+  }
 
   if ((file1 = fopen(old_filename, "r")) != NULL)
   {
