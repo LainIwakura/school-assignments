@@ -1,9 +1,18 @@
+/* Written by: Zachary Easterbrook
+ * Student ID: 103163420
+ * 
+ * This program sorts numbers in nums.bin and then rewrites 
+ * them to the file in sorted order.
+ */
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 
+// We pass this as a function pointer to the qsort function
+// provided by stdlib.h
 int compare(const void * a, const void * b)
 {
   return (*(int*)a - *(int*)b);
@@ -24,14 +33,17 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
+  // While we're not at the end of the file we keep building the array
   while (!feof(fp))
   {
     fread(item, sizeof(int), 1, fp);
     items[i++] = *item;
   }
+  // Sort the items and then close the file
   qsort(items, i, sizeof(int), compare);
   fclose(fp);
   
+  // Open the file again, but in writing mode
   fp = fopen("nums.bin", "w");
   if (fp == NULL)
   {
@@ -41,8 +53,13 @@ int main(int argc, char *argv[])
 
   j = i;
   i = 0;
+  // Write the numbers into the file.
   for (; i < j; ++i)
+  {
     fwrite(items + i, sizeof(int), 1, fp); 
+    // Uncomment next line to see numbers being printed
+    //printf("%d\n", items[i]); 
+  }
 
   fclose(fp);
 

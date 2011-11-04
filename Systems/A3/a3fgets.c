@@ -4,6 +4,11 @@
  * Student ID: 103163420
  */
 
+// Note: Uncomment stdio.h and the printf call to see the program working as it
+// should. Also...there could be a lot of error checking done here to make sure
+// our reads don't fail or anything...but unless they are purposefully tampered
+// with I suspect we'll be fine.
+
 // For system calls...
 #include <unistd.h>
 #include <fcntl.h>
