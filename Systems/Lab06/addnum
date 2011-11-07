@@ -1,0 +1,5 @@
+#!/bin/bash
+
+a=`cat $1`
+b=`cat $2`
+echo $((a+b))
