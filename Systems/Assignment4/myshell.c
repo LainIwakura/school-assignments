@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <wait.h>
 
+// Just for debugging. Compile with gcc -DMY_DEBUG to see debugging messages.
 #define DEBUG(msg) fprintf(stderr, "%s:%s:%d: %s\n", __FILE__, __FUNCTION__, __LINE__, msg)
 
 pid_t my_fork();
@@ -38,18 +39,23 @@ int main(int argc, char *argv[])
     printf("LainShell: ");
     fflush(stdout);
     fgets(line, 255, stdin);
+    // If the last character is a newline we set it to a null-terminator
     if (line[strlen(line) - 1] == '\n')
       line[strlen(line) - 1] = '\0';
 
     if (strlen(line) == 0)
       continue;
 
+    // Tokenize based on ;
     tok = strtok(line, ";");
     while (tok != NULL)
     {
+      // Save our position in the line so when we retokenize we're at the next
+      // token. We can't use NULL because strtok in process_args overwrites it.
       line += strlen(tok) + 1;
       process_args(tok, arg_list, &bgfg);
       tok = strtok(line, ";");
+      // If they typed exit or quit..we exit 
       if (strcmp(arg_list[0], "exit") == 0 || strcmp(arg_list[0], "quit") == 0)
         exit(0);
       
@@ -62,12 +68,14 @@ int main(int argc, char *argv[])
       }
       else if (pid > 0)
       {
+        // If this flag was set by process args we run in the background
         if (bgfg == 1)
         {
           waitpid(pid, &status, WNOHANG);  
         }
         else
         {
+          // Otherwise the foreground
           wait(&status);
         }
       }
@@ -94,6 +102,7 @@ int main(int argc, char *argv[])
 int process_args(char *line, char **arg_list, int *bgfg)
 {
   char *pos;
+  // Checking if it's a background process and setting a flag if it is.
   if ((pos = strstr(line, "&")) != NULL)
   {
     *pos = '\0';
