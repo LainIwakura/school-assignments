@@ -15,7 +15,7 @@
 #define DEBUG(msg) fprintf(stderr, "%s:%s:%d: %s\n", __FILE__, __FUNCTION__, __LINE__, msg)
 
 pid_t my_fork();
-int process_args(char *, char **);
+int process_args(char *, char **,  int *);
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
   char *line, *arg_list[255], name[BUFSIZ];
   char *tok;
   int status, i;
+  int bgfg;
 
   line = malloc(sizeof(char) * 255);
     
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
   while (1)
   {
     printf("LainShell: ");
+    fflush(stdout);
     fgets(line, 255, stdin);
     if (line[strlen(line) - 1] == '\n')
       line[strlen(line) - 1] = '\0';
@@ -46,7 +48,7 @@ int main(int argc, char *argv[])
     while (tok != NULL)
     {
       line += strlen(tok) + 1;
-      process_args(tok, arg_list);
+      process_args(tok, arg_list, &bgfg);
       tok = strtok(line, ";");
       if (strcmp(arg_list[0], "exit") == 0 || strcmp(arg_list[0], "quit") == 0)
         exit(0);
@@ -60,7 +62,14 @@ int main(int argc, char *argv[])
       }
       else if (pid > 0)
       {
-        wait(&status);
+        if (bgfg == 1)
+        {
+          waitpid(pid, &status, WNOHANG);  
+        }
+        else
+        {
+          wait(&status);
+        }
       }
       else
       {
@@ -82,8 +91,19 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-int process_args(char *line, char **arg_list)
+int process_args(char *line, char **arg_list, int *bgfg)
 {
+  char *pos;
+  if ((pos = strstr(line, "&")) != NULL)
+  {
+    *pos = '\0';
+    *bgfg = 1;
+  }
+  else
+  {
+    *bgfg = 0;
+  }
+
   int i = 0;
   char *token;
   token = strtok(line, " ");
