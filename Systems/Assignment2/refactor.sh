@@ -1,5 +1,5 @@
 #!/bin/bash
-# Written by: Zachary Easterbrook
+## Written by: Zachary Easterbrook
 # Student ID: 103163420
 # Written on: September 26th, 2011
 #
