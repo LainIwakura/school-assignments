@@ -1,0 +1,29 @@
+/** keywords (such as read and if) and identifiers should not be counted in 
+*   comments. 
+*   Comments can be longer than one line. 
+**/
+MAIN f() 
+BEGIN 
+  you are not required to check the syntax of the program; 
+     so all these words are identifiers;
+  except "quoted" strings and keywords; 
+  
+  to check how many lines and words I have;
+     type "wc A2.input" in "luna.cs";
+     your number of characters and lines may vary from sample output, 
+     depends on how you save this file;
+     
+  to count the identifers and keywords;
+      you have to count me one by one;
+  note that A1_A2 is not ONE identifier;
+	as defined in the language lexicon specification;
+	A1 and A2 should returned as two identifiers;
+  special characters such as !@#$%	and tab 
+        may also appear to test your program;
+  both 123 and 123.45 are numbers;
+  	while 12,34 are two numbers;
+/* you can put more than one comment line with characters like * and )  */
+
+  here is some more tricky part: 
+  " /** this is a quoted string **/ "  but /** "this is a comment " **/
+END
