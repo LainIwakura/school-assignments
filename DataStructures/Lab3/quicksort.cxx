@@ -39,18 +39,17 @@ int main()
 {
   vector<int> nums;
   vector<int> nums_small;
-  int j, k = 0;
   string yesno;
   clock_t t1, t2;
 
   std::mt19937 engine;
   std::uniform_int_distribution<int> dist;
   auto gen = std::bind(dist,engine);
-  for (int m = 0; m < 10000000; ++m)
+  for (int m = 0; m < 1000000; ++m)
     nums.push_back(gen());
 
-  for (int n = 0; n < 100; ++n)
-    nums_small.push_back(n);
+  for (int n = 0; n < 1000; ++n)
+    nums_small.push_back(gen());
 
   t1 = clock();
   quicksort(nums);
@@ -67,13 +66,9 @@ int main()
   cout << "Started algorithm for small n at: " << (float)t1 / CLOCKS_PER_SEC << "s" << endl;
   cout << "Running time took: " << diff << "s" << endl;
   cout << "Ended at: " << (float)t2 / CLOCKS_PER_SEC << "s" << endl;
-  /*
-  cout << "Nums have been sorted, display nums?" << endl;
-  cin >> yesno;
-  if (yesno == "yes")
-    for (auto i = nums.begin(); i != nums.end(); ++i)
-      cout << *i << endl;
-  */
+
+  for (auto i = nums_small.begin() + 980; i != nums_small.end(); ++i)
+    cout << *i << endl;
 
   return 0;
 }

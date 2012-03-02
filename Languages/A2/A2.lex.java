@@ -1,40 +1,8 @@
 import java.io.*;
 import java.util.*;
-class UseLexer {
-  public static void main(String[] args) throws java.io.IOException {
-    MyLexer2 lexer=new MyLexer2(new BufferedReader(new FileReader(new File("A2.input"))));
-    Token t;
-    int identifiers = 0;
-    int linecount = 0;
-    int quotedstrings = 0;
-    int numbers = 0;
-    int keywords = 0;
-    while ((t=lexer.yylex())!=null)
-    {
-      if (t.type.equals("COMMENT")) continue;
-      if (t.line >= linecount) linecount = t.line;
-      if (t.type.equals("QUOTE")) ++quotedstrings;
-      if (t.type.equals("KEY")) ++keywords;
-      if (t.type.equals("NUM")) ++numbers;
-      if (t.type.equals("ID")) ++identifiers;
-    }
-    linecount++;
-    BufferedWriter out = new BufferedWriter(new FileWriter("A2.output"));
-    out.write("identifiers: " + identifiers + "\nkeywords: " + keywords + "\n"+
-               "numbers: " + numbers + "\nlines: " + linecount + "\nquotedString: " + quotedstrings + "\n");
-    out.close();
-  }
-}
-class Token {
-  String type;
-  String text;
-  int line;
-  Token(String t, String txt, int l){type=t; text=txt; line=l; }
-  public String toString(){ return text+" " +type + " " +line; }
-}
 
 
-class MyLexer2 {
+class A2 {
 	private final int YY_BUFFER_SIZE = 512;
 	private final int YY_F = -1;
 	private final int YY_NO_STATE = -1;
@@ -44,6 +12,12 @@ class MyLexer2 {
 	private final int YY_NO_ANCHOR = 4;
 	private final int YY_BOL = 128;
 	private final int YY_EOF = 129;
+ 
+  int identifiers = 0, linecount = 0, quotedstrings = 0, numbers = 0, keywords = 0;
+  public static void main(String[] args) throws java.io.IOException {
+    A2 lexer = new A2(new BufferedReader(new FileReader(new File("A2.input"))));
+    lexer.yylex();
+  }
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -54,7 +28,7 @@ class MyLexer2 {
 	private boolean yy_at_bol;
 	private int yy_lexical_state;
 
-	MyLexer2 (java.io.Reader reader) {
+	A2 (java.io.Reader reader) {
 		this ();
 		if (null == reader) {
 			throw (new Error("Error: Bad input stream initializer."));
@@ -62,7 +36,7 @@ class MyLexer2 {
 		yy_reader = new java.io.BufferedReader(reader);
 	}
 
-	MyLexer2 (java.io.InputStream instream) {
+	A2 (java.io.InputStream instream) {
 		this ();
 		if (null == instream) {
 			throw (new Error("Error: Bad input stream initializer."));
@@ -70,7 +44,7 @@ class MyLexer2 {
 		yy_reader = new java.io.BufferedReader(new java.io.InputStreamReader(instream));
 	}
 
-	private MyLexer2 () {
+	private A2 () {
 		yy_buffer = new char[YY_BUFFER_SIZE];
 		yy_buffer_read = 0;
 		yy_buffer_index = 0;
@@ -83,8 +57,10 @@ class MyLexer2 {
 
 	private boolean yy_eof_done = false;
 	private final int YYINITIAL = 0;
+	private final int COMMENT = 1;
 	private final int yy_state_dtrans[] = {
-		0
+		0,
+		21
 	};
 	private void yybegin (int state) {
 		yy_lexical_state = state;
@@ -244,21 +220,21 @@ class MyLexer2 {
 		/* 6 */ YY_NO_ANCHOR,
 		/* 7 */ YY_NO_ANCHOR,
 		/* 8 */ YY_NO_ANCHOR,
-		/* 9 */ YY_NOT_ACCEPT,
+		/* 9 */ YY_NO_ANCHOR,
 		/* 10 */ YY_NO_ANCHOR,
-		/* 11 */ YY_NO_ANCHOR,
+		/* 11 */ YY_NOT_ACCEPT,
 		/* 12 */ YY_NO_ANCHOR,
 		/* 13 */ YY_NO_ANCHOR,
-		/* 14 */ YY_NOT_ACCEPT,
+		/* 14 */ YY_NO_ANCHOR,
 		/* 15 */ YY_NO_ANCHOR,
-		/* 16 */ YY_NO_ANCHOR,
-		/* 17 */ YY_NOT_ACCEPT,
+		/* 16 */ YY_NOT_ACCEPT,
+		/* 17 */ YY_NO_ANCHOR,
 		/* 18 */ YY_NO_ANCHOR,
-		/* 19 */ YY_NO_ANCHOR,
-		/* 20 */ YY_NOT_ACCEPT,
-		/* 21 */ YY_NO_ANCHOR,
+		/* 19 */ YY_NOT_ACCEPT,
+		/* 20 */ YY_NO_ANCHOR,
+		/* 21 */ YY_NOT_ACCEPT,
 		/* 22 */ YY_NO_ANCHOR,
-		/* 23 */ YY_NO_ANCHOR,
+		/* 23 */ YY_NOT_ACCEPT,
 		/* 24 */ YY_NO_ANCHOR,
 		/* 25 */ YY_NO_ANCHOR,
 		/* 26 */ YY_NO_ANCHOR,
@@ -271,30 +247,30 @@ class MyLexer2 {
 		/* 33 */ YY_NO_ANCHOR,
 		/* 34 */ YY_NO_ANCHOR,
 		/* 35 */ YY_NO_ANCHOR,
-		/* 36 */ YY_NO_ANCHOR
+		/* 36 */ YY_NO_ANCHOR,
+		/* 37 */ YY_NO_ANCHOR,
+		/* 38 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"3:10,4,3:2,4,3:20,20,3:7,2,3:3,22,1,21:10,3:7,13,17,23,14,7,6,18,23,5,23:2," +
-"8,19,16,23:3,11,9,12,15,23,10,23:3,3:6,23:26,3:5,0:2")[0];
+"5:10,2,5:2,2,5:20,1,5:7,4,5:3,22,3,21:10,5:7,14,18,23,15,8,7,19,23,6,23:2,9" +
+",20,17,23:3,12,10,13,16,23,11,23:3,5:6,23:26,5:5,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,37,
-"0,1,2,1,3,4,5,6,1,7,1,6,8,1,9:2,10,8:2,11,12,13,14,15,16,17,18,19,20,21,22," +
-"23,24,25,26,27,28")[0];
+	private int yy_rmap[] = unpackFromString(1,39,
+"0,1,2,1,3,4,1,5,1:3,2,6,5,7,8,9,1,10,7,11,12,13,14,15,16,17,18,19,20,21,22," +
+"23,24,25,26,27,28,29")[0];
 
-	private int yy_nxt[][] = unpackFromString(29,24,
-"1,2,10:2,3,4,11,24,11:2,35,30,11:5,36,11,31,15,5,18,11,-1:25,6,9,-1:26,11,7" +
-",11:9,16,11:3,-1,11,-1,11,-1:21,5,17,-1:2,6:3,-1,6:19,-1:5,11:15,-1,11,-1,1" +
-"1,-1,9,20,9:21,-1:21,12,-1:3,14:19,8,14:3,-1:5,11:7,7,11:7,-1,11,-1,11,-1:5" +
-",11:9,7,11:5,-1,11,-1,11,-1,13,20,9:21,-1:5,11:2,7,11:12,-1,11,-1,11,-1:5,1" +
-"1:3,7,11:5,7,11:5,-1,11,-1,11,-1:5,11:11,7,11:3,-1,11,-1,11,-1:5,11:3,25,11" +
-":7,19,11:3,-1,11,-1,11,-1:5,11:4,21,11:10,-1,11,-1,11,-1:5,11:7,34,22,11:6," +
-"-1,11,-1,11,-1:5,23,11:14,-1,11,-1,11,-1:5,11:7,21,11:7,-1,11,-1,11,-1:5,11" +
-":6,23,11:8,-1,11,-1,11,-1:5,11:2,26,11:12,-1,11,-1,11,-1:5,11:8,27,11:6,-1," +
-"11,-1,11,-1:5,28,11:14,-1,11,-1,11,-1:5,11:13,27,11,-1,11,-1,11,-1:5,11:10," +
-"29,11:4,-1,11,-1,11,-1:5,11:6,32,11:8,-1,11,-1,11,-1:5,11:2,33,11:12,-1,11," +
-"-1,11");
+	private int yy_nxt[][] = unpackFromString(30,24,
+"1,2,3,12,17:2,4,13,26,13:2,37,32,13:5,38,13,33,5,17,13,-1:25,6,11:22,-1:6,1" +
+"3,7,13:9,18,13:4,-1,13,-1:21,5,19,-1:7,13:16,-1,13,-1:4,16,-1:40,14,-1:6,23" +
+",-1:23,8,-1:25,13:7,7,13:8,-1,13,-1:6,13:9,7,13:6,-1,13,1,9:3,15,9:19,-1:6," +
+"13:2,7,13:13,-1,13,-1:3,10,-1:26,13:3,7,13:5,7,13:6,-1,13,-1:6,13:11,7,13:4" +
+",-1,13,-1:6,13:3,27,13:7,20,13:4,-1,13,-1:6,13:4,22,13:11,-1,13,-1:6,13:7,3" +
+"6,24,13:7,-1,13,-1:6,25,13:15,-1,13,-1:6,13:7,22,13:8,-1,13,-1:6,13:6,25,13" +
+":9,-1,13,-1:6,13:2,28,13:13,-1,13,-1:6,13:8,29,13:7,-1,13,-1:6,30,13:15,-1," +
+"13,-1:6,13:13,29,13:2,-1,13,-1:6,13:10,31,13:5,-1,13,-1:6,13:6,34,13:9,-1,1" +
+"3,-1:6,13:2,35,13:13,-1,13");
 
-	public Token yylex ()
+	public void yylex ()
 		throws java.io.IOException {
 		int yy_lookahead;
 		int yy_anchor = YY_NO_ANCHOR;
@@ -316,7 +292,12 @@ class MyLexer2 {
 			yy_next_state = YY_F;
 			yy_next_state = yy_nxt[yy_rmap[yy_state]][yy_cmap[yy_lookahead]];
 			if (YY_EOF == yy_lookahead && true == yy_initial) {
- return null;
+
+    BufferedWriter out = new BufferedWriter(new FileWriter("A2.output"));
+    out.write("identifiers: " + identifiers + "\nkeywords: " + keywords + "\n"+
+               "numbers: " + numbers + "\nlines: " + yyline + "\nquotedString: " + quotedstrings + "\n");
+    out.close();
+    return;
 			}
 			if (YY_F != yy_next_state) {
 				yy_state = yy_next_state;
@@ -351,120 +332,124 @@ class MyLexer2 {
 					case -4:
 						break;
 					case 4:
-						{ return(new Token("ID", yytext(), yyline));}
+						{ ++identifiers; }
 					case -5:
 						break;
 					case 5:
-						{ return(new Token("NUM", yytext(), yyline));}
+						{ ++numbers; }
 					case -6:
 						break;
 					case 6:
-						{ return(new Token("COMMENT", yytext(), yyline));}
+						{ ++quotedstrings; }
 					case -7:
 						break;
 					case 7:
-						{ return(new Token("KEY", yytext(), yyline));}
+						{ ++keywords; }
 					case -8:
 						break;
 					case 8:
-						{ return(new Token("QUOTE", yytext(), yyline));}
+						{ yybegin(COMMENT); }
 					case -9:
 						break;
-					case 10:
+					case 9:
 						{}
 					case -10:
 						break;
-					case 11:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 10:
+						{ yybegin(YYINITIAL); }
 					case -11:
 						break;
 					case 12:
-						{ return(new Token("NUM", yytext(), yyline));}
+						{}
 					case -12:
 						break;
 					case 13:
-						{ return(new Token("COMMENT", yytext(), yyline));}
+						{ ++identifiers; }
 					case -13:
+						break;
+					case 14:
+						{ ++numbers; }
+					case -14:
 						break;
 					case 15:
 						{}
-					case -14:
-						break;
-					case 16:
-						{ return(new Token("ID", yytext(), yyline));}
 					case -15:
 						break;
-					case 18:
+					case 17:
 						{}
 					case -16:
 						break;
-					case 19:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 18:
+						{ ++identifiers; }
 					case -17:
 						break;
-					case 21:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 20:
+						{ ++identifiers; }
 					case -18:
 						break;
 					case 22:
-						{ return(new Token("ID", yytext(), yyline));}
+						{ ++identifiers; }
 					case -19:
 						break;
-					case 23:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 24:
+						{ ++identifiers; }
 					case -20:
 						break;
-					case 24:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 25:
+						{ ++identifiers; }
 					case -21:
 						break;
-					case 25:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 26:
+						{ ++identifiers; }
 					case -22:
 						break;
-					case 26:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 27:
+						{ ++identifiers; }
 					case -23:
 						break;
-					case 27:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 28:
+						{ ++identifiers; }
 					case -24:
 						break;
-					case 28:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 29:
+						{ ++identifiers; }
 					case -25:
 						break;
-					case 29:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 30:
+						{ ++identifiers; }
 					case -26:
 						break;
-					case 30:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 31:
+						{ ++identifiers; }
 					case -27:
 						break;
-					case 31:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 32:
+						{ ++identifiers; }
 					case -28:
 						break;
-					case 32:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 33:
+						{ ++identifiers; }
 					case -29:
 						break;
-					case 33:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 34:
+						{ ++identifiers; }
 					case -30:
 						break;
-					case 34:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 35:
+						{ ++identifiers; }
 					case -31:
 						break;
-					case 35:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 36:
+						{ ++identifiers; }
 					case -32:
 						break;
-					case 36:
-						{ return(new Token("ID", yytext(), yyline));}
+					case 37:
+						{ ++identifiers; }
 					case -33:
+						break;
+					case 38:
+						{ ++identifiers; }
+					case -34:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

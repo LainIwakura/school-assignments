@@ -22,7 +22,7 @@ BEGIN
         may also appear to test your program;
   both 123 and 123.45 are numbers;
   	while 12,34 are two numbers;
-/* you can put more than one comment line with characters like * and )  */
+/** you can put more than one comment line with characters like * and )  **/
 
   here is some more tricky part: 
   " /** this is a quoted string **/ "  but /** "this is a comment " **/
